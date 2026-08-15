@@ -1,0 +1,17 @@
+{
+  "name": "campus-report-system",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --parallel run dev",
+    "dev:student": "pnpm --filter student-mobile run dev",
+    "dev:admin": "pnpm --filter admin-web run dev",
+    "build": "pnpm --recursive run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@9.15.0"
+}
