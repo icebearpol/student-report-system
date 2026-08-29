@@ -15,6 +15,11 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="login" options={{ headerShown: false }} />
+        <Stack.Screen name="signup" options={{ title: 'Create Account', headerShown: true }} />
+        <Stack.Screen name="anonymous" options={{ headerShown: false }} />
+        <Stack.Screen name="issues" options={{ title: 'Public Issues', headerTintColor: '#fff', headerStyle:{backgroundColor: theme.colors.gradientStart} as any }} />
+        <Stack.Screen name="my-reports" options={{ title: 'My Reports' }} />
         <Stack.Screen
           name="report/[id]"
           options={{ title: 'Report Details', presentation: 'card' }}

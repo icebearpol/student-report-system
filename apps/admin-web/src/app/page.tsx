@@ -15,8 +15,8 @@ export default function DashboardPage() {
     <DashboardLayout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
-          <p className="mt-1 text-slate-500">
+          <h1 className="text-2xl font-bold text-[#0A3C58]">Dashboard</h1>
+          <p className="mt-1 text-[#42474d]">
             Overview of campus report activity and status
           </p>
         </div>
@@ -26,7 +26,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-900">
+              <h2 className="text-lg font-semibold text-[#0A3C58]">
                 Recent Reports
               </h2>
             </div>

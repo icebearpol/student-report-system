@@ -4,6 +4,42 @@
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 antialiased;
+    @apply bg-[#E8F7FB] text-[#101e21] antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .input-field-custom {
+    background-color: rgba(232, 247, 251, 0.5);
+    border: 1px solid rgba(10, 60, 88, 0.2);
+    border-radius: 24px;
+    transition: all 0.3s ease;
+  }
+  .input-field-custom:focus-within {
+    border-color: #46C3DB;
+    border-width: 2px;
+    box-shadow: 0 0 8px rgba(70, 195, 219, 0.4);
+    background-color: #ffffff;
+  }
+  .login-card {
+    border-top-left-radius: 36px;
+    border-top-right-radius: 36px;
+    box-shadow: 0 -8px 30px rgba(10, 60, 88, 0.08);
+  }
+  .custom-glass-input {
+    background-color: rgba(232, 247, 251, 0.5);
+    border: 1px solid rgba(10, 60, 88, 0.2);
+  }
+  .custom-glass-input:focus-within {
+    border-color: #46C3DB;
+    box-shadow: 0 0 0 4px rgba(70, 195, 219, 0.1);
+  }
+  .custom-dashed-border {
+    border: 2px dashed rgba(70, 195, 219, 0.4);
+  }
+  .input-focus-ring:focus-within {
+    box-shadow: 0 0 0 2px #46C3DB, 0 0 10px rgba(70, 195, 219, 0.3);
+    border-color: #46C3DB;
   }
 }

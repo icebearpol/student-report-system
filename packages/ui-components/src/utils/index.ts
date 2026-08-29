@@ -1,5 +1,34 @@
 import type { ReportPriority, ReportStatus } from '@campus/shared-types';
-import { colors } from '../tokens';
+import { colors, ocean } from '../tokens';
+
+// Deterministic mock duplicate detection: category + location token + title overlap ≤20m mock distance
+export function tokenize(str: string): string[] {
+  return str.toLowerCase().split(/[\s,\-]+/).filter(Boolean);
+}
+export function jaccard(a: string[], b: string[]): number {
+  const sa = new Set(a); const sb = new Set(b);
+  const inter = [...sa].filter(x=>sb.has(x)).length;
+  const union = new Set([...sa, ...sb]).size;
+  return union===0?0:inter/union;
+}
+export function locationTokensOverlap(a: string, b: string): number {
+  return jaccard(tokenize(a), tokenize(b));
+}
+export function checkDuplicateMock(
+  input: { category: string; location: string; title: string },
+  reports: { id:string; category:string; location:string; title:string }[]
+): { reportId: string; distanceM: number } | null {
+  for (const r of reports) {
+    if (r.category !== input.category) continue;
+    const loc = locationTokensOverlap(r.location, input.location);
+    const titleSim = jaccard(tokenize(r.title), tokenize(input.title));
+    if (loc > 0.3 || titleSim > 0.4) {
+      const hash = [...r.id].reduce((s,c)=>s+c.charCodeAt(0),0);
+      return { reportId: r.id, distanceM: 5 + (hash % 16) };
+    }
+  }
+  return null;
+}
 
 export interface StatusBadgeConfig {
   label: string;

@@ -2,11 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import {
   LayoutDashboard,
   FileText,
   Settings,
-  ClipboardList,
 } from 'lucide-react';
 import { currentAdmin } from '@campus/mock-data';
 
@@ -21,9 +21,16 @@ export function Sidebar() {
   return (
     <aside className="fixed inset-y-0 left-0 z-30 flex w-64 flex-col border-r border-slate-200 bg-white">
       <div className="flex h-16 items-center gap-2 border-b border-slate-200 px-6">
-        <ClipboardList className="h-7 w-7 text-primary-600" />
+        <Image
+          src="/campus-fix-mark.png"
+          width={36}
+          height={36}
+          alt="CampusFix"
+          className="h-9 w-9 object-contain shrink-0"
+          priority
+        />
         <div>
-          <p className="text-sm font-semibold text-slate-900">Campus Reports</p>
+          <p className="text-sm font-semibold text-slate-900">CampusFix</p>
           <p className="text-xs text-slate-500">Admin Dashboard</p>
         </div>
       </div>
