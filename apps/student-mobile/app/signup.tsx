@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { Feather, FontAwesome } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function SignupScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -18,123 +30,135 @@ export default function SignupScreen() {
       end={{ x: 0.5, y: 1 }}
       style={styles.background}
     >
-      {/* <Stack.Screen options={{ headerShown: false }} /> */}
       <Stack.Screen options={{ headerShown: false, animation: 'slide_from_left' }} />
 
+      {/* Uses the real safe-area top inset instead of a fixed number, so
+          this sits correctly below the notch/Dynamic Island/status bar
+          on any device. */}
       <TouchableOpacity
         onPress={() => router.back()}
         activeOpacity={0.7}
-        style={styles.backButton}
+        style={[styles.backButton, { top: insets.top + 12 }]}
       >
         <Feather name="arrow-left" size={20} color="#0F172A" />
       </TouchableOpacity>
 
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={insets.top}
       >
-        {/* Big hero logo, sitting outside/above the card */}
-        <Image
-          source={require('../assets/logo.png')}
-          style={styles.heroLogo}
-          resizeMode="contain"
-        />
+        <ScrollView
+          contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 44 }]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          {/* maxWidth keeps this from stretching edge-to-edge on a tablet */}
+          <View style={styles.centeredColumn}>
+            {/* Big hero logo, sitting outside/above the card */}
+            <Image
+              source={require('../assets/logo.png')}
+              style={styles.heroLogo}
+              resizeMode="contain"
+            />
 
-        <View style={styles.card}>
-          <Text style={styles.title}>Create your Account</Text>
-          <Text style={styles.subtitle}>Join the CampusFix community</Text>
+            <View style={styles.card}>
+              <Text style={styles.title}>Create your Account</Text>
+              <Text style={styles.subtitle}>Join the CampusFix community</Text>
 
-          <View style={styles.inputGroup}>
-            <LinearGradient
-              colors={['#EFF6FF', '#E0F2FE']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.inputContainer}
-            >
-              <Feather name="mail" size={17} color="#3B82F6" style={styles.icon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Email"
-                placeholderTextColor="#8FAFD1"
-                value={email}
-                onChangeText={setEmail}
-                autoCapitalize="none"
-                keyboardType="email-address"
-              />
-            </LinearGradient>
+              <View style={styles.inputGroup}>
+                <LinearGradient
+                  colors={['#EFF6FF', '#E0F2FE']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.inputContainer}
+                >
+                  <Feather name="mail" size={17} color="#3B82F6" style={styles.icon} />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Email"
+                    placeholderTextColor="#8FAFD1"
+                    value={email}
+                    onChangeText={setEmail}
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                  />
+                </LinearGradient>
 
-            <LinearGradient
-              colors={['#EFF6FF', '#E0F2FE']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.inputContainer}
-            >
-              <Feather name="lock" size={17} color="#3B82F6" style={styles.icon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                placeholderTextColor="#8FAFD1"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-              />
-            </LinearGradient>
+                <LinearGradient
+                  colors={['#EFF6FF', '#E0F2FE']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.inputContainer}
+                >
+                  <Feather name="lock" size={17} color="#3B82F6" style={styles.icon} />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Password"
+                    placeholderTextColor="#8FAFD1"
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                  />
+                </LinearGradient>
 
-            <LinearGradient
-              colors={['#EFF6FF', '#E0F2FE']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.inputContainer}
-            >
-              <Feather name="lock" size={17} color="#3B82F6" style={styles.icon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Confirm Password"
-                placeholderTextColor="#8FAFD1"
-                secureTextEntry
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-              />
-            </LinearGradient>
+                <LinearGradient
+                  colors={['#EFF6FF', '#E0F2FE']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.inputContainer}
+                >
+                  <Feather name="lock" size={17} color="#3B82F6" style={styles.icon} />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Confirm Password"
+                    placeholderTextColor="#8FAFD1"
+                    secureTextEntry
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
+                  />
+                </LinearGradient>
+              </View>
+
+              <TouchableOpacity
+                onPress={() => router.replace('/(tabs)')}
+                activeOpacity={0.85}
+                style={styles.signupButtonWrapper}
+              >
+                <LinearGradient
+                  colors={['#0F172A', '#0891B2']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.signupButton}
+                >
+                  <Text style={styles.signupButtonText}>Sign up</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+
+              <Text style={styles.orText}>— Or sign up with —</Text>
+
+              <View style={styles.socialRow}>
+                <TouchableOpacity style={styles.socialCircle}>
+                  <FontAwesome name="facebook" size={19} color="#1877F2" />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.socialCircle}>
+                  <FontAwesome name="google" size={19} color="#EA4335" />
+                </TouchableOpacity>
+              </View>
+
+              <TouchableOpacity
+                onPress={() => router.push('/login')}
+                activeOpacity={0.7}
+                style={styles.loginRow}
+              >
+                <Text style={styles.loginText}>
+                  Already have an account? <Text style={styles.loginBold}>Login</Text>
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-
-          <TouchableOpacity
-            onPress={() => router.replace('/(tabs)')}
-            activeOpacity={0.85}
-            style={styles.signupButtonWrapper}
-          >
-            <LinearGradient
-              colors={['#0F172A', '#0891B2']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.signupButton}
-            >
-              <Text style={styles.signupButtonText}>Sign up</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-
-          <Text style={styles.orText}>— Or sign up with —</Text>
-
-          <View style={styles.socialRow}>
-            <TouchableOpacity style={styles.socialCircle}>
-              <FontAwesome name="facebook" size={19} color="#1877F2" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.socialCircle}>
-              <FontAwesome name="google" size={19} color="#EA4335" />
-            </TouchableOpacity>
-          </View>
-
-          <TouchableOpacity
-            onPress={() => router.push('/login')}
-            activeOpacity={0.7}
-            style={styles.loginRow}
-          >
-            <Text style={styles.loginText}>
-              Already have an account? <Text style={styles.loginBold}>Login</Text>
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </LinearGradient>
   );
 }
@@ -143,9 +167,11 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
   },
+  flex: {
+    flex: 1,
+  },
   backButton: {
     position: 'absolute',
-    top: 56,
     left: 24,
     zIndex: 10,
     width: 38,
@@ -164,8 +190,12 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     paddingHorizontal: 24,
-    paddingTop: 44,
     paddingBottom: 30,
+  },
+  centeredColumn: {
+    width: '100%',
+    maxWidth: 460,
+    alignSelf: 'center',
   },
 
   heroLogo: {

@@ -1,26 +1,41 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { Feather, FontAwesome } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ headerShown: false }} />
+      {/* Merged into a single Stack.Screen — having two entries for the
+          same screen can cause the options to fight each other. */}
       <Stack.Screen options={{ headerShown: false, animation: 'slide_from_right' }} />
 
       {/* ===== Top: gradient "Hello, Welcome" card with logo ===== */}
+      {/* paddingTop uses the device's real safe-area inset instead of a
+          fixed number, so this looks right on any phone/tablet. */}
       <LinearGradient
         colors={['#0F172A', '#0891B2', '#ECFEFF']}
         locations={[0, 0.55, 1]}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
-        style={styles.topCard}
+        style={[styles.topCard, { paddingTop: insets.top + 24 }]}
       >
         <Text style={styles.helloText}>Hello, Welcome!</Text>
         <Text style={styles.helloSubtext}>Glad to see you!</Text>
@@ -32,88 +47,101 @@ export default function LoginScreen() {
       </LinearGradient>
 
       {/* ===== Bottom: white login form ===== */}
-      <View style={styles.bottomSection}>
-        <View style={styles.loginTitleRow}>
-          <Text style={styles.loginTitleText}>Login </Text>
-          <Text style={[styles.loginTitleText, styles.campusWord]}>Campus</Text>
-          <Text style={[styles.loginTitleText, styles.fixWord]}>Fix</Text>
-        </View>
-
-        <View style={styles.inputGroup}>
-          <LinearGradient
-            colors={['#EFF6FF', '#E0F2FE']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.inputContainer}
-          >
-            <Feather name="user" size={18} color="#3B82F6" style={styles.icon} />
-            <TextInput
-              style={styles.input}
-              placeholder="Username or Email"
-              placeholderTextColor="#8FAFD1"
-              value={username}
-              onChangeText={setUsername}
-              autoCapitalize="none"
-            />
-          </LinearGradient>
-
-          <LinearGradient
-            colors={['#EFF6FF', '#E0F2FE']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.inputContainer}
-          >
-            <Feather name="lock" size={18} color="#3B82F6" style={styles.icon} />
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              placeholderTextColor="#8FAFD1"
-              secureTextEntry
-              value={password}
-              onChangeText={setPassword}
-            />
-          </LinearGradient>
-
-          <TouchableOpacity style={styles.forgotWrapper}>
-            <Text style={styles.forgotText}>Forgot Password?</Text>
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity
-          onPress={() => router.replace('/(tabs)')}
-          activeOpacity={0.85}
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={insets.top}
+      >
+        <ScrollView
+          contentContainerStyle={styles.bottomScroll}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
         >
-          <LinearGradient
-            colors={['#0066FF', '#00C6FF']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.loginButton}
-          >
-            <Text style={styles.loginButtonText}>Login</Text>
-          </LinearGradient>
-        </TouchableOpacity>
+          {/* maxWidth keeps this from stretching edge-to-edge on a tablet */}
+          <View style={styles.formWrapper}>
+            <View style={styles.loginTitleRow}>
+              <Text style={styles.loginTitleText}>Login </Text>
+              <Text style={[styles.loginTitleText, styles.campusWord]}>Campus</Text>
+              <Text style={[styles.loginTitleText, styles.fixWord]}>Fix</Text>
+            </View>
 
-        <Text style={styles.orText}>or login with social platforms</Text>
+            <View style={styles.inputGroup}>
+              <LinearGradient
+                colors={['#EFF6FF', '#E0F2FE']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.inputContainer}
+              >
+                <Feather name="user" size={18} color="#3B82F6" style={styles.icon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Username or Email"
+                  placeholderTextColor="#8FAFD1"
+                  value={username}
+                  onChangeText={setUsername}
+                  autoCapitalize="none"
+                />
+              </LinearGradient>
 
-        <View style={styles.socialRow}>
-          <TouchableOpacity style={styles.socialCircle}>
-            <FontAwesome name="facebook" size={20} color="#1877F2" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.socialCircle}>
-            <FontAwesome name="google" size={20} color="#EA4335" />
-          </TouchableOpacity>
-        </View>
+              <LinearGradient
+                colors={['#EFF6FF', '#E0F2FE']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.inputContainer}
+              >
+                <Feather name="lock" size={18} color="#3B82F6" style={styles.icon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Password"
+                  placeholderTextColor="#8FAFD1"
+                  secureTextEntry
+                  value={password}
+                  onChangeText={setPassword}
+                />
+              </LinearGradient>
 
-        <TouchableOpacity
-          onPress={() => router.push('/signup')}
-          activeOpacity={0.7}
-          style={styles.registerRow}
-        >
-          <Text style={styles.registerText}>
-            Don't have an account? <Text style={styles.registerBold}>Register</Text>
-          </Text>
-        </TouchableOpacity>
-      </View>
+              <TouchableOpacity style={styles.forgotWrapper}>
+                <Text style={styles.forgotText}>Forgot Password?</Text>
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity
+              onPress={() => router.replace('/(tabs)')}
+              activeOpacity={0.85}
+            >
+              <LinearGradient
+                colors={['#0066FF', '#00C6FF']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.loginButton}
+              >
+                <Text style={styles.loginButtonText}>Login</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <Text style={styles.orText}>or login with social platforms</Text>
+
+            <View style={styles.socialRow}>
+              <TouchableOpacity style={styles.socialCircle}>
+                <FontAwesome name="facebook" size={20} color="#1877F2" />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.socialCircle}>
+                <FontAwesome name="google" size={20} color="#EA4335" />
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity
+              onPress={() => router.push('/signup')}
+              activeOpacity={0.7}
+              style={styles.registerRow}
+            >
+              <Text style={styles.registerText}>
+                Don't have an account? <Text style={styles.registerBold}>Register</Text>
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 }
@@ -123,12 +151,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
+  flex: {
+    flex: 1,
+  },
 
   /* ---------- Top dark card ---------- */
   topCard: {
     borderBottomLeftRadius: 44,
     borderBottomRightRadius: 44,
-    paddingTop: 64,
     paddingBottom: 30,
     alignItems: 'center',
   },
@@ -147,14 +177,20 @@ const styles = StyleSheet.create({
     width: 280,
     height: 250,
     marginTop: 19,
-    marginBottom: 10
+    marginBottom: 10,
   },
 
   /* ---------- Bottom white section ---------- */
-  bottomSection: {
-    flex: 1,
-    paddingHorizontal: 28,
+  bottomScroll: {
+    flexGrow: 1,
     paddingTop: 30,
+    paddingBottom: 30,
+  },
+  formWrapper: {
+    width: '100%',
+    maxWidth: 460,
+    alignSelf: 'center',
+    paddingHorizontal: 28,
   },
   loginTitleRow: {
     flexDirection: 'row',
@@ -171,24 +207,6 @@ const styles = StyleSheet.create({
   },
   fixWord: {
     color: '#0891B2',
-  },
-  iContainer: {
-    width: 13,
-    height: 24,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    position: 'relative',
-    marginHorizontal: 1,
-  },
-  iStem: {
-    width: 3.5,
-    height: 15,
-    borderRadius: 2,
-    backgroundColor: '#0F172A',
-  },
-  iDot: {
-    position: 'absolute',
-    top: -3,
   },
 
   inputGroup: {
