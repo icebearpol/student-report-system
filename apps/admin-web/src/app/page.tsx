@@ -15,8 +15,8 @@ export default function DashboardPage() {
     <DashboardLayout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl font-bold text-[#0A3C58]">Dashboard</h1>
-          <p className="mt-1 text-[#42474d]">
+          <h1 className="text-xl font-bold text-[#0A3C58]">Dashboard</h1>
+          <p className="mt-1 text-sm text-[#42474d]">
             Overview of campus report activity and status
           </p>
         </div>

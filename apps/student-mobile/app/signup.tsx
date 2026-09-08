@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { theme } from '@/constants/theme';
+import { BrandHeader } from '@/components/BrandHeader';
 import { signup } from '@/lib/auth';
 
 export default function SignupScreen(){
@@ -16,11 +17,12 @@ export default function SignupScreen(){
     try{ await signup(name||email.split('@')[0], email, pw); router.replace('/(tabs)'); }catch(e:any){setErr(e.message)}finally{setLoading(false)}
   }
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <View style={styles.headerWrap}>
-        <Image source={require('@/assets/campus-fix-logo.png')} style={styles.headerLogo} resizeMode="contain" />
-      </View>
-      <View style={styles.card}>
+    <View style={styles.container}>
+      <LinearGradient colors={[theme.colors.gradientStart, theme.colors.gradientEnd]} style={styles.hero}>
+        <BrandHeader variant="hero" />
+      </LinearGradient>
+      <ScrollView style={styles.card} contentContainerStyle={styles.cardContent} showsVerticalScrollIndicator={false}>
+      <View style={styles.cardInner}>
         <Text style={styles.title}>Create Account</Text>
         <Text style={styles.sub}>Join the community and help see change on campus.</Text>
         {err? <View style={styles.eb}><Text style={styles.et}>{err}</Text></View>:null}
@@ -37,17 +39,17 @@ export default function SignupScreen(){
         <View style={styles.footer}><Text style={styles.footerText}>Already have an account? </Text><Link href={"/login" as any}><Text style={styles.link}>Sign In</Text></Link></View>
       </View>
     </ScrollView>
+    </View>
   );
 }
 const styles=StyleSheet.create({
   container:{ flex:1, backgroundColor: theme.colors.background },
-  content:{ padding:24, paddingTop:60 },
-  header:{ fontSize:32, fontWeight:'700', textAlign:'center', color: theme.colors.gradientStart, marginBottom:20 },
-  headerWrap:{ alignItems:'center', justifyContent:'center', marginBottom:20 },
-  headerLogo:{ width:160, height:48 },
-  card:{ backgroundColor:'#fff', borderRadius:36, padding:24, gap:4, shadowColor:'#0A3C58', shadowOpacity:0.08, shadowRadius:20, elevation:6 },
-  title:{ fontSize:24, fontWeight:'600', color: theme.colors.primary, textAlign:'center' },
-  sub:{ fontSize:13, color: theme.colors.textSecondary, textAlign:'center', marginBottom:8 },
+  hero:{ alignItems:'center', justifyContent:'center', paddingTop:24, paddingBottom:20, paddingHorizontal:24 },
+  card:{ backgroundColor:'#fff', borderTopLeftRadius:36, borderTopRightRadius:36, marginTop:-30, flex:1, shadowColor:'#0A3C58', shadowOpacity:0.08, shadowRadius:20, elevation:8 },
+  cardContent:{ padding:24, gap:4 },
+  cardInner:{ gap:4 },
+  title:{ fontSize:20, fontWeight:'600', color: theme.colors.primary, textAlign:'center' },
+  sub:{ fontSize:14, color: theme.colors.textSecondary, textAlign:'center', marginBottom:8 },
   eb:{ backgroundColor:'#ffdad6', borderRadius:8, padding:10, marginBottom:8 }, et:{ color:'#93000a', fontSize:13 },
   label:{ fontSize:12, fontWeight:'500', color: theme.colors.textSecondary, marginTop:8, marginLeft:8 },
   inputRow:{ flexDirection:'row', alignItems:'center', backgroundColor:'rgba(232,247,251,0.5)', borderWidth:1, borderColor:'rgba(10,60,88,0.2)', borderRadius:12, paddingHorizontal:14, height:52, gap:10, marginTop:4 },

@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { theme } from '@/constants/theme';
+import { BrandHeader } from '@/components/BrandHeader';
 import { login } from '@/lib/auth';
 
 export default function LoginScreen() {
@@ -22,7 +23,7 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient colors={[theme.colors.gradientStart, theme.colors.gradientEnd]} style={styles.hero}>
-        <Image source={require('@/assets/campusfix-full-logo.png')} style={{ width: 300, height: 265, resizeMode: 'contain', alignSelf: 'center' }} />
+        <BrandHeader variant="hero" />
       </LinearGradient>
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Welcome Back</Text>
@@ -51,20 +52,9 @@ export default function LoginScreen() {
 }
 const styles = StyleSheet.create({
   container:{ flex:1, backgroundColor: theme.colors.background },
-  hero:{ alignItems:'center', justifyContent:'center', paddingTop:28, paddingBottom:24, paddingHorizontal:24 },
-  logoCard:{ width:120, height:120, backgroundColor:'transparent', alignItems:'center', justifyContent:'center', marginBottom:14, shadowColor:'#000', shadowOffset:{width:0,height:4}, shadowOpacity:0.25, shadowRadius:8, elevation:5 },
-  logoImage:{ width:120, height:120, marginBottom:12 } as any,
-  logoText:{ fontSize:28, fontWeight:'700', color: theme.colors.gradientStart },
-  title:{ fontSize:28, fontWeight:'700', color:'#fff' },
-  titleRow:{ flexDirection:'row', alignItems:'center', justifyContent:'center' },
-  campusText:{ fontSize:32, fontWeight:'700', color:'#FFFFFF', textShadowColor:'rgba(0,0,0,0.3)', textShadowOffset:{width:0,height:1}, textShadowRadius:4 },
-  fixText:{ fontSize:32, fontWeight:'700', color:'#00E5FF', textShadowColor:'rgba(0,0,0,0.3)', textShadowOffset:{width:0,height:1}, textShadowRadius:4 },
-  titleCampus:{ color:'#FFFFFF', fontSize:32, fontWeight:'700', textShadowColor:'rgba(0,0,0,0.3)', textShadowOffset:{width:0,height:1}, textShadowRadius:4 } as any,
-  titleFix:{ color:'#00E5FF', fontSize:32, fontWeight:'700', textShadowColor:'rgba(0,0,0,0.3)', textShadowOffset:{width:0,height:1}, textShadowRadius:4 } as any,
-  tagline:{ fontSize:12, letterSpacing:2, fontWeight:'600', color:'rgba(255,255,255,0.85)', marginTop:6, textAlign:'center' },
-  subtitle:{ fontSize:14, color:'#a2cbed', marginTop:4, textAlign:'center' },
+  hero:{ alignItems:'center', justifyContent:'center', paddingTop:24, paddingBottom:20, paddingHorizontal:24 },
   card:{ backgroundColor:'#fff', borderTopLeftRadius:36, borderTopRightRadius:36, marginTop:-30, padding:24, flex:1, shadowColor:'#0A3C58', shadowOpacity:0.08, shadowRadius:20, elevation:8 },
-  cardTitle:{ fontSize:24, fontWeight:'600', color: theme.colors.primary },
+  cardTitle:{ fontSize:20, fontWeight:'600', color: theme.colors.primary },
   cardSub:{ fontSize:14, color: theme.colors.textSecondary, marginTop:4 },
   errorBox:{ backgroundColor:'#ffdad6', borderRadius:8, padding:10, marginTop:12 },
   errorText:{ color:'#93000a', fontSize:13 },

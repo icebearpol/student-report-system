@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import { BrandLogo } from '@/components/BrandLogo';
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { login } from '@/lib/auth';
 
@@ -36,22 +36,15 @@ export default function LoginPage() {
           <div className="absolute top-20 -right-20 w-48 h-48 bg-[#46C3DB] rounded-full opacity-30" />
         </div>
         <div className="relative z-10 flex items-center justify-center bg-transparent">
-          <Image
-            src="/campusfix-full-logo.png"
-            width={340}
-            height={300}
-            alt="CampusFix"
-            className="w-[300px] h-[265px] md:w-[340px] md:h-[300px] object-contain drop-shadow-[0_6px_16px_rgba(0,0,0,0.25)]"
-            priority
-          />
+          <BrandLogo variant="hero" />
         </div>
       </div>
 
       <div className="flex-1 flex items-center justify-center bg-[#E8F7FB] p-6 md:p-8">
         <div className="login-card bg-white w-full px-6 pt-10 pb-8 relative z-20 max-w-md mx-auto rounded-[36px] shadow-[0_8px_32px_rgba(10,60,88,0.12)]">
-        <div className="mb-8">
-          <h2 className="text-[24px] font-semibold text-[#0A3C58] mb-2">Welcome Back</h2>
-          <p className="text-[#42474d] text-[16px]">Sign in to access your dashboard and points.</p>
+        <div className="mb-6 flex flex-col gap-1">
+          <h2 className="text-xl font-semibold text-[#0A3C58]">Welcome Back</h2>
+          <p className="text-sm text-[#42474d]">Sign in to access your dashboard and points.</p>
         </div>
         <form className="space-y-4" onSubmit={onSubmit}>
           {error && <div className="rounded-lg bg-[#ffdad6] text-[#93000a] text-sm px-4 py-3">{error}</div>}

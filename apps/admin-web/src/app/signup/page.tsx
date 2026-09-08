@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import { BrandLogo } from '@/components/BrandLogo';
 import { User, Mail, Lock, LockKeyhole, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { signup } from '@/lib/auth';
 
@@ -30,20 +30,13 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#E8F7FB]">
-      <header className="w-full flex flex-col items-center justify-center pt-12 pb-8 gap-3">
-        <Image
-          src="/campus-fix-logo.png"
-          width={220}
-          height={80}
-          alt="CampusFix"
-          className="h-auto w-[200px] object-contain"
-          priority
-        />
+      <header className="flex w-full flex-col items-center justify-center gap-2 pb-6 pt-10">
+        <BrandLogo variant="header" />
       </header>
       <main className="flex-1 flex flex-col justify-end md:justify-center px-6 md:px-0">
         <div className="bg-white w-full md:max-w-md mx-auto rounded-t-[36px] md:rounded-[36px] shadow-[0_-4px_40px_rgba(10,60,88,0.08)] px-6 pt-10 pb-8 flex flex-col gap-8">
-          <div className="flex flex-col gap-2 text-center">
-            <h2 className="text-[24px] font-semibold text-[#0a3c58]">Create Account</h2>
+          <div className="flex flex-col gap-1 text-center">
+            <h2 className="text-xl font-semibold text-[#0a3c58]">Create Account</h2>
             <p className="text-sm text-[#42474d]">Join the community and help see change on campus.</p>
           </div>
           <form onSubmit={onSubmit} className="flex flex-col gap-4">

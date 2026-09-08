@@ -1,4 +1,4 @@
-import { colors, spacing, fontSize, fontWeight, borderRadius, ocean, gradients } from '@campus/ui-components';
+import { colors, spacing, fontSize, fontWeight, borderRadius, ocean, gradients, brand } from '@campus/ui-components';
 
 export const theme = {
   colors: {
@@ -20,6 +20,7 @@ export const theme = {
     gradientEnd: ocean.cyan,
   },
   gradients,
+  brand,
   spacing,
   fontSize,
   fontWeight,

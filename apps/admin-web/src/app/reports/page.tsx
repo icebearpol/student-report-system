@@ -11,7 +11,7 @@ export default function ReportsPage() {
     <DashboardLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">All Reports</h1>
+          <h1 className="text-xl font-bold text-slate-900">All Reports</h1>
           <p className="mt-1 text-slate-500">
             {sortedReports.length} total reports submitted
           </p>

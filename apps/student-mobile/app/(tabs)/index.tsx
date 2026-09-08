@@ -1,4 +1,4 @@
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -20,7 +20,10 @@ export default function HomeScreen() {
       {/* TopAppBar */}
       <LinearGradient colors={[theme.colors.gradientStart, theme.colors.gradientEnd]} style={styles.topBar}>
         <Ionicons name="menu" size={24} color="#fff" />
-        <Text style={styles.topTitle}>CampusFix</Text>
+        <View style={styles.topBrand}>
+          <Image source={require('@/assets/icon.png')} style={styles.topMark} resizeMode="contain" />
+          <Text style={styles.topTitle}>CampusFix</Text>
+        </View>
         <Ionicons name="notifications-outline" size={22} color="#fff" />
       </LinearGradient>
 
@@ -81,7 +84,9 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   topBar:{ flexDirection:'row', alignItems:'center', justifyContent:'space-between', paddingHorizontal:16, paddingVertical:14, backgroundColor: theme.colors.gradientStart },
-  topTitle:{ color:'#fff', fontSize:18, fontWeight:'700' },
+  topBrand:{ flexDirection:'row', alignItems:'center', gap:8 },
+  topMark:{ width:32, height:32 },
+  topTitle:{ color:'#fff', fontSize:16, fontWeight:'600' },
   heroWrap:{ paddingHorizontal:16, marginTop:12 },
   hero:{ borderRadius:16, padding:16, overflow:'hidden' },
   heroHello:{ fontSize:28, fontWeight:'700', color:'#fff' },
