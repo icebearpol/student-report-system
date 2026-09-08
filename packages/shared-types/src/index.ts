@@ -19,6 +19,7 @@ export interface User {
   studentId?: string;
   avatarUrl?: string;
   createdAt: string;
+  notificationSettings?: NotificationPreferences;
 }
 
 export interface Report {
@@ -29,6 +30,11 @@ export interface Report {
   status: ReportStatus;
   priority: ReportPriority;
   location: string;
+  // BACKEND REQUIRED going forward: optional today (mock-data supplies
+  // plausible campus coordinates), but the real geocoding pipeline must
+  // populate latitude/longitude server-side for map pins and proximity.
+  latitude?: number;
+  longitude?: number;
   submittedBy: string;
   assignedTo?: string;
   imageUrls: string[];
@@ -69,6 +75,48 @@ export interface UpdateReportInput {
   priority?: ReportPriority;
   assignedTo?: string;
   adminNotes?: string;
+}
+
+export type NotificationType =
+  | 'status_change'
+  | 'comment'
+  | 'system'
+  | 'emergency';
+
+export interface Notification {
+  id: string;
+  userId: string;
+  type: NotificationType;
+  title: string;
+  body: string;
+  reportId?: string;
+  createdAt: string;
+  read: boolean;
+}
+
+export interface NotificationPreferences {
+  statusChanges: boolean;
+  comments: boolean;
+  emergency: boolean;
+  system: boolean;
+}
+
+export interface MapPin {
+  id: string;
+  title: string;
+  location: string;
+  latitude: number;
+  longitude: number;
+  status: ReportStatus;
+  category: ReportCategory;
+}
+
+export interface EmergencyContact {
+  id: string;
+  name: string;
+  role: string;
+  phone: string;
+  priority: number;
 }
 
 export const REPORT_CATEGORY_LABELS: Record<ReportCategory, string> = {

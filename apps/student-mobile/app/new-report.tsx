@@ -10,7 +10,7 @@ import {
   Switch,
   Modal,
 } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import type { ReportCategory, ReportPriority } from '@campus/shared-types';
@@ -19,7 +19,7 @@ import {
   REPORT_PRIORITY_LABELS,
 } from '@campus/shared-types';
 import { theme } from '@/constants/theme';
-import { mockReports } from '@campus/mock-data';
+import { getDuplicateCheckReports, getReportById } from '@campus/mock-data';
 import { checkDuplicateMock } from '@campus/ui-components';
 import { upvoteReport } from '@/lib/auth';
 
@@ -28,12 +28,22 @@ const priorities = Object.keys(REPORT_PRIORITY_LABELS) as ReportPriority[];
 
 export default function NewReportScreen() {
   const router = useRouter();
+  // Presettable via route params (e.g. Emergency screen links to
+  // /new-report?priority=urgent). Defaults to medium when absent.
+  const params = useLocalSearchParams<{ priority?: string }>();
+  const initialPriority: ReportPriority =
+    params.priority === 'low' ||
+    params.priority === 'medium' ||
+    params.priority === 'high' ||
+    params.priority === 'urgent'
+      ? params.priority
+      : 'medium';
   const [step, setStep] = useState<1|2|3>(1);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [category, setCategory] = useState<ReportCategory>('maintenance');
-  const [priority, setPriority] = useState<ReportPriority>('medium');
+  const [priority, setPriority] = useState<ReportPriority>(initialPriority);
   const [anonymous, setAnonymous] = useState(false);
   const [showAI, setShowAI] = useState(false);
   const [dupReport, setDupReport] = useState<any>(null);
@@ -44,10 +54,12 @@ export default function NewReportScreen() {
       Alert.alert('Missing Fields', 'Please fill in all required fields including building name.');
       return;
     }
-    // deterministic mock AI duplicate check
-    const dup = checkDuplicateMock({ category, location, title }, mockReports.map(r=>({id:r.id, category:r.category, location:r.location, title:r.title})));
+    // deterministic mock AI duplicate check via data-layer seam
+    // (BACKEND TODO: POST /api/reports/check-duplicate)
+    const candidates = getDuplicateCheckReports();
+    const dup = checkDuplicateMock({ category, location, title }, candidates);
     if (dup && !showAI) {
-      const r = mockReports.find(x=>x.id===dup.reportId);
+      const r = getReportById(dup.reportId);
       setDupReport(r); setDist(dup.distanceM); setShowAI(true); return;
     }
     setShowAI(false);

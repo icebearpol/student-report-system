@@ -1,20 +1,25 @@
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { useState } from 'react';
+import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { mockReports } from '@campus/mock-data';
+import { getReportsByStatus } from '@campus/mock-data';
+import type { ReportStatus } from '@campus/shared-types';
 import { ReportCard } from '@/components/ReportCard';
 import { theme } from '@/constants/theme';
 
 export default function IssuesScreen(){
+  const router = useRouter();
   const [view,setView]=useState<'list'|'map'>('list');
-  const [filter,setFilter]=useState<string>('all');
-  const data = filter==='all'? mockReports : mockReports.filter(r=>r.status===filter);
+  const [filter,setFilter]=useState<ReportStatus|'all'>('all');
+  // BACKEND SEAM: list loads through getReportsByStatus() only
+  // (GET /api/reports?status=) — never touch mock arrays directly.
+  const data = getReportsByStatus(filter);
   return (
     <View style={styles.container}>
       <View style={styles.toggleRow}>
         <View style={styles.toggle}>
           <TouchableOpacity onPress={()=>setView('list')} style={[styles.toggleBtn, view==='list'&&styles.toggleActive]}><Text style={[styles.toggleText, view==='list'&&styles.toggleTextActive]}>List View</Text></TouchableOpacity>
-          <TouchableOpacity onPress={()=>setView('map')} style={[styles.toggleBtn, view==='map'&&styles.toggleActive]}><Text style={[styles.toggleText, view==='map'&&styles.toggleTextActive]}>Map View</Text></TouchableOpacity>
+          <TouchableOpacity onPress={()=>router.push('/public-map' as any)} style={[styles.toggleBtn, view==='map'&&styles.toggleActive]}><Text style={[styles.toggleText, view==='map'&&styles.toggleTextActive]}>Map View</Text></TouchableOpacity>
         </View>
         <TouchableOpacity style={styles.filterBtn}><Ionicons name="filter" size={18} color={theme.colors.primary}/></TouchableOpacity>
       </View>

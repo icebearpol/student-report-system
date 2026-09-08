@@ -1,31 +1,39 @@
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { currentStudent, mockReports, getReportsByUser } from '@campus/mock-data';
+import { currentStudent, getReportsByUser, getReportStats, getRecentReports } from '@campus/mock-data';
 import { ReportCard } from '@/components/ReportCard';
+import { MenuDrawer } from '@/components/MenuDrawer';
 import { theme } from '@/constants/theme';
 import { fabShadow } from '@/constants/platformShadow';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const [menuVisible, setMenuVisible] = useState(false);
   const reports = getReportsByUser(currentStudent.id);
-  const open = mockReports.filter(r=>r.status==='pending').length;
-  const progress = mockReports.filter(r=>r.status==='in_review').length;
-  const resolved = mockReports.filter(r=>r.status==='resolved').length;
-  const recent = [...mockReports].slice(0,3);
+  // BACKEND SEAM: counts/recent load through data-layer accessors only
+  // (GET /api/reports/stats, GET /api/reports?limit=3) — see mock-data.
+  const { open, inProgress: progress, resolved } = getReportStats();
+  const recent = getRecentReports(3);
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{paddingBottom:24}} showsVerticalScrollIndicator={false}>
       {/* TopAppBar */}
       <LinearGradient colors={[theme.colors.gradientStart, theme.colors.gradientEnd]} style={styles.topBar}>
-        <Ionicons name="menu" size={24} color="#fff" />
+        <TouchableOpacity onPress={()=>setMenuVisible(true)} hitSlop={12}>
+          <Ionicons name="menu" size={24} color="#fff" />
+        </TouchableOpacity>
         <View style={styles.topBrand}>
           <Image source={require('@/assets/icon.png')} style={styles.topMark} resizeMode="contain" />
           <Text style={styles.topTitle}>CampusFix</Text>
         </View>
-        <Ionicons name="notifications-outline" size={22} color="#fff" />
+        <TouchableOpacity onPress={()=>router.push('/notifications' as any)} hitSlop={12}>
+          <Ionicons name="notifications-outline" size={22} color="#fff" />
+        </TouchableOpacity>
       </LinearGradient>
+      <MenuDrawer visible={menuVisible} onClose={()=>setMenuVisible(false)} />
 
       {/* Hero */}
       <View style={styles.heroWrap}>
@@ -46,9 +54,9 @@ export default function HomeScreen() {
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         <View style={styles.grid}>
           <TouchableOpacity onPress={()=>router.push('/new-report')} style={styles.actionCard}><View style={styles.actionIcon}><Ionicons name="camera-outline" size={26} color={theme.colors.primary}/></View><Text style={styles.actionText}>Camera / Report</Text></TouchableOpacity>
-          <TouchableOpacity onPress={()=>router.push('/(tabs)/issues' as any)} style={styles.actionCard}><View style={styles.actionIcon}><Ionicons name="map-outline" size={26} color={theme.colors.primary}/></View><Text style={styles.actionText}>View Public Map</Text></TouchableOpacity>
+          <TouchableOpacity onPress={()=>router.push('/public-map' as any)} style={styles.actionCard}><View style={styles.actionIcon}><Ionicons name="map-outline" size={26} color={theme.colors.primary}/></View><Text style={styles.actionText}>View Public Map</Text></TouchableOpacity>
           <TouchableOpacity onPress={()=>router.push('/(tabs)/history' as any)} style={styles.actionCard}><View style={styles.actionIcon}><Ionicons name="time-outline" size={26} color={theme.colors.primary}/></View><Text style={styles.actionText}>My History</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.actionCard,{borderColor:'rgba(239,68,68,0.2)'}]}><View style={[styles.actionIcon,{backgroundColor:'#ffdad6'}]}><Ionicons name="call" size={22} color={theme.colors.danger}/></View><Text style={styles.actionText}>Emergency</Text></TouchableOpacity>
+          <TouchableOpacity onPress={()=>router.push('/emergency' as any)} style={[styles.actionCard,{borderColor:'rgba(239,68,68,0.2)'}]}><View style={[styles.actionIcon,{backgroundColor:'#ffdad6'}]}><Ionicons name="call" size={22} color={theme.colors.danger}/></View><Text style={styles.actionText}>Emergency</Text></TouchableOpacity>
         </View>
       </View>
 

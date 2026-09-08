@@ -2,6 +2,8 @@
 
 A **pnpm monorepo** for managing campus incident reports — featuring a **Student Mobile App** (Expo / React Native) and an **Admin Web Dashboard** (Next.js).
 
+> Design source of truth: [`DESIGN.md`](DESIGN.md) · Backend handoff: [`apps/student-mobile/HANDOFF.md`](apps/student-mobile/HANDOFF.md)
+
 ## Project Structure
 
 ```
