@@ -5,8 +5,16 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Campus Report System — Admin Dashboard',
+  title: 'CampusFix — Admin Dashboard',
   description: 'Manage and review campus incident reports',
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-48.png', sizes: '48x48', type: 'image/png' },
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+  },
 };
 
 export default function RootLayout({

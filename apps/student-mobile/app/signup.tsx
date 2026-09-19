@@ -32,9 +32,6 @@ export default function SignupScreen() {
     >
       <Stack.Screen options={{ headerShown: false, animation: 'slide_from_left' }} />
 
-      {/* Uses the real safe-area top inset instead of a fixed number, so
-          this sits correctly below the notch/Dynamic Island/status bar
-          on any device. */}
       <TouchableOpacity
         onPress={() => router.back()}
         activeOpacity={0.7}
@@ -53,9 +50,7 @@ export default function SignupScreen() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* maxWidth keeps this from stretching edge-to-edge on a tablet */}
           <View style={styles.centeredColumn}>
-            {/* Big hero logo, sitting outside/above the card */}
             <Image
               source={require('../assets/logo.png')}
               style={styles.heroLogo}
@@ -147,6 +142,15 @@ export default function SignupScreen() {
               </View>
 
               <TouchableOpacity
+                onPress={() => router.push('/anonymous')}
+                activeOpacity={0.7}
+                style={styles.guestButton}
+              >
+                <Feather name="eye-off" size={16} color="#0891B2" style={styles.guestIcon} />
+                <Text style={styles.guestButtonText}>Continue as Guest</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
                 onPress={() => router.push('/login')}
                 activeOpacity={0.7}
                 style={styles.loginRow}
@@ -197,7 +201,6 @@ const styles = StyleSheet.create({
     maxWidth: 460,
     alignSelf: 'center',
   },
-
   heroLogo: {
     alignSelf: 'center',
     width: 295,
@@ -205,7 +208,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
   },
-
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 32,
@@ -230,7 +232,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 22,
   },
-
   inputGroup: {
     width: '100%',
     marginBottom: 20,
@@ -253,7 +254,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#0F172A',
   },
-
   signupButtonWrapper: {
     width: '100%',
   },
@@ -275,7 +275,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.5,
   },
-
   orText: {
     fontSize: 12,
     color: '#94A3B8',
@@ -298,7 +297,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
+  guestButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    borderColor: '#0891B2',
+    borderStyle: 'dashed',
+    borderRadius: 14,
+    paddingVertical: 12,
+    width: '100%',
+    marginTop: 4,
+  },
+  guestIcon: {
+    marginRight: 8,
+  },
+  guestButtonText: {
+    color: '#0891B2',
+    fontWeight: '700',
+    fontSize: 14,
+  },
   loginRow: {
     marginTop: 22,
   },

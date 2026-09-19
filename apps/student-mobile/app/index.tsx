@@ -1,7 +1,5 @@
 import { Redirect } from 'expo-router';
-
+// Separate anonymous entry per user choice — initial route is /anonymous
 export default function Index() {
-  // TODO: once you have real auth state, check it here and
-  // redirect to '/(tabs)' if the user is already logged in.
-  return <Redirect href="/login" />;
+  return <Redirect href="/anonymous" />;
 }

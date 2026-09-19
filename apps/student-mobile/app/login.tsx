@@ -23,13 +23,8 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Merged into a single Stack.Screen — having two entries for the
-          same screen can cause the options to fight each other. */}
       <Stack.Screen options={{ headerShown: false, animation: 'slide_from_right' }} />
 
-      {/* ===== Top: gradient "Hello, Welcome" card with logo ===== */}
-      {/* paddingTop uses the device's real safe-area inset instead of a
-          fixed number, so this looks right on any phone/tablet. */}
       <LinearGradient
         colors={['#0F172A', '#0891B2', '#ECFEFF']}
         locations={[0, 0.55, 1]}
@@ -46,7 +41,6 @@ export default function LoginScreen() {
         />
       </LinearGradient>
 
-      {/* ===== Bottom: white login form ===== */}
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -57,7 +51,6 @@ export default function LoginScreen() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* maxWidth keeps this from stretching edge-to-edge on a tablet */}
           <View style={styles.formWrapper}>
             <View style={styles.loginTitleRow}>
               <Text style={styles.loginTitleText}>Login </Text>
@@ -131,6 +124,15 @@ export default function LoginScreen() {
             </View>
 
             <TouchableOpacity
+              onPress={() => router.push('/anonymous')}
+              activeOpacity={0.7}
+              style={styles.guestButton}
+            >
+              <Feather name="eye-off" size={16} color="#0891B2" style={styles.guestIcon} />
+              <Text style={styles.guestButtonText}>Continue as Guest</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
               onPress={() => router.push('/signup')}
               activeOpacity={0.7}
               style={styles.registerRow}
@@ -154,8 +156,6 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
-
-  /* ---------- Top dark card ---------- */
   topCard: {
     borderBottomLeftRadius: 44,
     borderBottomRightRadius: 44,
@@ -179,8 +179,6 @@ const styles = StyleSheet.create({
     marginTop: 19,
     marginBottom: 10,
   },
-
-  /* ---------- Bottom white section ---------- */
   bottomScroll: {
     flexGrow: 1,
     paddingTop: 30,
@@ -208,7 +206,6 @@ const styles = StyleSheet.create({
   fixWord: {
     color: '#0891B2',
   },
-
   inputGroup: {
     marginBottom: 22,
   },
@@ -243,7 +240,6 @@ const styles = StyleSheet.create({
     color: '#0066FF',
     fontWeight: '600',
   },
-
   loginButton: {
     paddingVertical: 16,
     borderRadius: 16,
@@ -261,7 +257,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.5,
   },
-
   orText: {
     fontSize: 12,
     color: '#94A3B8',
@@ -284,7 +279,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
+  guestButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    borderColor: '#0891B2',
+    borderStyle: 'dashed',
+    borderRadius: 14,
+    paddingVertical: 12,
+    marginTop: 24,
+  },
+  guestIcon: {
+    marginRight: 8,
+  },
+  guestButtonText: {
+    color: '#0891B2',
+    fontWeight: '700',
+    fontSize: 14,
+  },
   registerRow: {
     alignItems: 'center',
     marginTop: 24,
