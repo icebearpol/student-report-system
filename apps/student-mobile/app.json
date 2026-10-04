@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "Campus Report",
+    "slug": "campus-report-student",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "campus-report",
+    "userInterfaceStyle": "light",
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": ["expo-router"]
+  }
+}

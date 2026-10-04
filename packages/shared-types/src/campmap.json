@@ -1,0 +1,690 @@
+{
+  "map": {
+    "name": "SMC Tagum Campus Map",
+    "viewBox": "50 190 1950 770",
+    "width": 1950,
+    "height": 770,
+    "note": "Coordinates (anchor.x/y) are in viewBox units; anchorPct is 0-1 across the map."
+  },
+  "categories": {
+    "academic": {
+      "label": "Academic",
+      "color": "#4C6FFF",
+      "sideColor": "#2E45B8"
+    },
+    "services": {
+      "label": "Student services",
+      "color": "#8B6CF6",
+      "sideColor": "#5B3FC4"
+    },
+    "residential": {
+      "label": "Residential",
+      "color": "#F59E42",
+      "sideColor": "#C26E14"
+    },
+    "utility": {
+      "label": "Utilities & facilities",
+      "color": "#8A97AE",
+      "sideColor": "#5F6B82"
+    },
+    "access": {
+      "label": "Entrances",
+      "color": "#F0556E",
+      "sideColor": "#B52E47"
+    },
+    "sports": {
+      "label": "Sports & recreation",
+      "color": "#2EC4A6",
+      "sideColor": "#1C8F78"
+    },
+    "nature": {
+      "label": "Green space",
+      "color": "#7ACB7A",
+      "sideColor": "#4FA05A"
+    }
+  },
+  "buildings": [
+    {
+      "id": 1,
+      "slug": "main-gate",
+      "name": "Main Gate",
+      "category": "access",
+      "kind": "building",
+      "anchor": {
+        "x": 330,
+        "y": 335
+      },
+      "anchorPct": {
+        "x": 0.1436,
+        "y": 0.1883
+      },
+      "paths": [
+        "M318,322 L346,311 L360,338 L333,358 Z"
+      ]
+    },
+    {
+      "id": 2,
+      "slug": "guard-house-waiting-area",
+      "name": "Guard House / Waiting Area",
+      "category": "access",
+      "kind": "building",
+      "anchor": {
+        "x": 355,
+        "y": 308
+      },
+      "anchorPct": {
+        "x": 0.1564,
+        "y": 0.1532
+      },
+      "paths": [
+        "M342,296 L366,294 L368,318 L346,321 Z"
+      ]
+    },
+    {
+      "id": 3,
+      "slug": "power-house-1",
+      "name": "Power House 1",
+      "category": "utility",
+      "kind": "building",
+      "anchor": {
+        "x": 405,
+        "y": 232
+      },
+      "anchorPct": {
+        "x": 0.1821,
+        "y": 0.0545
+      },
+      "paths": [
+        "M388,215 L422,217 L420,247 L388,246 Z"
+      ]
+    },
+    {
+      "id": 4,
+      "slug": "open-volleyball-court",
+      "name": "Open Volleyball Court",
+      "category": "sports",
+      "kind": "zone",
+      "anchor": {
+        "x": 420,
+        "y": 451
+      },
+      "anchorPct": {
+        "x": 0.1897,
+        "y": 0.339
+      },
+      "paths": [
+        "M380,405 L460,405 L461,517 L384,512 Z"
+      ]
+    },
+    {
+      "id": 5,
+      "slug": "graduate-school-college-of-law-bldg",
+      "name": "Graduate School / College of Law Bldg.",
+      "category": "academic",
+      "kind": "building",
+      "anchor": {
+        "x": 499,
+        "y": 253
+      },
+      "anchorPct": {
+        "x": 0.2303,
+        "y": 0.0818
+      },
+      "paths": [
+        "M430,225 L566,232 L565,282 L432,274 Z"
+      ]
+    },
+    {
+      "id": 6,
+      "slug": "college-building",
+      "name": "College Building",
+      "category": "academic",
+      "kind": "building",
+      "anchor": {
+        "x": 859,
+        "y": 270
+      },
+      "anchorPct": {
+        "x": 0.4149,
+        "y": 0.1039
+      },
+      "paths": [
+        "M610,243 L780,250 L780,290 L610,283 Z",
+        "M780,250 L1108,272 L1108,310 L780,290 Z",
+        "M572,250 L610,250 L610,340 L572,338 Z",
+        "M1112,274 L1215,280 L1215,323 L1112,312 Z"
+      ]
+    },
+    {
+      "id": 7,
+      "slug": "admin-building",
+      "name": "Admin Building",
+      "category": "services",
+      "kind": "building",
+      "anchor": {
+        "x": 592,
+        "y": 468
+      },
+      "anchorPct": {
+        "x": 0.2779,
+        "y": 0.361
+      },
+      "paths": [
+        "M557,415 L625,415 L622,533 L557,530 Z"
+      ]
+    },
+    {
+      "id": 8,
+      "slug": "mimph-gym",
+      "name": "MIMPH Gym",
+      "category": "sports",
+      "kind": "building",
+      "anchor": {
+        "x": 494,
+        "y": 622
+      },
+      "anchorPct": {
+        "x": 0.2277,
+        "y": 0.561
+      },
+      "paths": [
+        "M375,548 L618,562 L612,700 L370,688 Z"
+      ]
+    },
+    {
+      "id": 9,
+      "slug": "brc-building",
+      "name": "BRC Building",
+      "category": "services",
+      "kind": "building",
+      "anchor": {
+        "x": 286,
+        "y": 590
+      },
+      "anchorPct": {
+        "x": 0.121,
+        "y": 0.5195
+      },
+      "paths": [
+        "M266,545 L334,570 L304,592 L268,568 Z",
+        "M246,580 L262,568 L330,618 L318,645 L248,610 Z"
+      ]
+    },
+    {
+      "id": 10,
+      "slug": "criminology-bldg",
+      "name": "Criminology Bldg.",
+      "category": "academic",
+      "kind": "building",
+      "anchor": {
+        "x": 695,
+        "y": 555
+      },
+      "anchorPct": {
+        "x": 0.3308,
+        "y": 0.474
+      },
+      "paths": [
+        "M671,524 L717,522 L717,597 L672,597 Z"
+      ]
+    },
+    {
+      "id": 11,
+      "slug": "grade-school-bldg",
+      "name": "Grade School Bldg.",
+      "category": "academic",
+      "kind": "building",
+      "anchor": {
+        "x": 810,
+        "y": 676
+      },
+      "anchorPct": {
+        "x": 0.3897,
+        "y": 0.6312
+      },
+      "paths": [
+        "M673,652 L950,640 L952,705 L673,708 Z",
+        "M622,675 L662,675 L662,702 L622,702 Z"
+      ]
+    },
+    {
+      "id": 12,
+      "slug": "school-canteen-fastfood",
+      "name": "School Canteen / Fastfood",
+      "category": "services",
+      "kind": "building",
+      "anchor": {
+        "x": 808,
+        "y": 556
+      },
+      "anchorPct": {
+        "x": 0.3887,
+        "y": 0.4753
+      },
+      "paths": [
+        "M720,497 L797,495 L797,545 L720,545 Z",
+        "M720,547 L900,537 L902,580 L720,592 Z",
+        "M830,508 L924,510 L924,535 L830,532 Z"
+      ]
+    },
+    {
+      "id": 13,
+      "slug": "sister-s-convent",
+      "name": "Sister's Convent",
+      "category": "residential",
+      "kind": "building",
+      "anchor": {
+        "x": 831,
+        "y": 460
+      },
+      "anchorPct": {
+        "x": 0.4005,
+        "y": 0.3506
+      },
+      "paths": [
+        "M781,440 L878,432 L880,490 L783,498 Z",
+        "M882,430 L974,436 L974,484 L882,480 Z"
+      ]
+    },
+    {
+      "id": 14,
+      "slug": "student-lounge",
+      "name": "Student Lounge",
+      "category": "services",
+      "kind": "building",
+      "anchor": {
+        "x": 879,
+        "y": 390
+      },
+      "anchorPct": {
+        "x": 0.4251,
+        "y": 0.2597
+      },
+      "paths": [
+        "M870,376 L924,378 L924,402 L870,400 Z"
+      ]
+    },
+    {
+      "id": 15,
+      "slug": "school-chapel",
+      "name": "School Chapel",
+      "category": "services",
+      "kind": "building",
+      "anchor": {
+        "x": 1003,
+        "y": 375
+      },
+      "anchorPct": {
+        "x": 0.4887,
+        "y": 0.2403
+      },
+      "paths": [
+        "M950,345 L1052,350 L1050,404 L952,398 Z"
+      ]
+    },
+    {
+      "id": 16,
+      "slug": "school-clinic",
+      "name": "School Clinic",
+      "category": "services",
+      "kind": "building",
+      "anchor": {
+        "x": 1003,
+        "y": 464
+      },
+      "anchorPct": {
+        "x": 0.4887,
+        "y": 0.3558
+      },
+      "paths": [
+        "M978,442 L1018,440 L1030,486 L980,484 Z",
+        "M952,488 L1040,490 L1040,514 L952,510 Z"
+      ]
+    },
+    {
+      "id": 17,
+      "slug": "grade-school-playground",
+      "name": "Grade School Playground",
+      "category": "sports",
+      "kind": "zone",
+      "anchor": {
+        "x": 1000,
+        "y": 566
+      },
+      "anchorPct": {
+        "x": 0.4872,
+        "y": 0.4883
+      },
+      "paths": [
+        "M960,522 L1042,522 L1042,612 L960,606 Z"
+      ]
+    },
+    {
+      "id": 18,
+      "slug": "student-service-center",
+      "name": "Student Service Center",
+      "category": "services",
+      "kind": "building",
+      "anchor": {
+        "x": 989,
+        "y": 690
+      },
+      "anchorPct": {
+        "x": 0.4815,
+        "y": 0.6494
+      },
+      "paths": [
+        "M962,670 L1002,660 L1016,690 L1016,712 L962,712 Z"
+      ]
+    },
+    {
+      "id": 19,
+      "slug": "high-school-bldg",
+      "name": "High School Bldg.",
+      "category": "academic",
+      "kind": "building",
+      "anchor": {
+        "x": 1248,
+        "y": 672
+      },
+      "anchorPct": {
+        "x": 0.6144,
+        "y": 0.626
+      },
+      "paths": [
+        "M1115,657 L1375,636 L1375,683 L1115,703 Z",
+        "M1382,640 L1446,637 L1446,680 L1382,684 Z"
+      ]
+    },
+    {
+      "id": 20,
+      "slug": "college-laboratories",
+      "name": "College Laboratories",
+      "category": "academic",
+      "kind": "building",
+      "anchor": {
+        "x": 1310,
+        "y": 305
+      },
+      "anchorPct": {
+        "x": 0.6462,
+        "y": 0.1494
+      },
+      "paths": [
+        "M1222,273 L1403,284 L1400,332 L1222,322 Z"
+      ]
+    },
+    {
+      "id": 21,
+      "slug": "marian-hotel-bshm-tm-lab",
+      "name": "Marian Hotel / BSHM-TM Lab.",
+      "category": "academic",
+      "kind": "building",
+      "anchor": {
+        "x": 1478,
+        "y": 311
+      },
+      "anchorPct": {
+        "x": 0.7323,
+        "y": 0.1571
+      },
+      "paths": [
+        "M1440,290 L1517,296 L1517,330 L1440,325 Z",
+        "M1521,298 L1538,300 L1538,328 L1521,328 Z"
+      ]
+    },
+    {
+      "id": 22,
+      "slug": "bahay-kubo",
+      "name": "Bahay Kubo",
+      "category": "services",
+      "kind": "building",
+      "anchor": {
+        "x": 1587,
+        "y": 313
+      },
+      "anchorPct": {
+        "x": 0.7882,
+        "y": 0.1597
+      },
+      "paths": [
+        "M1566,298 L1608,300 L1606,327 L1566,325 Z"
+      ]
+    },
+    {
+      "id": 23,
+      "slug": "eco-park",
+      "name": "Eco Park",
+      "category": "nature",
+      "kind": "zone",
+      "anchor": {
+        "x": 1528,
+        "y": 428
+      },
+      "anchorPct": {
+        "x": 0.7579,
+        "y": 0.3091
+      },
+      "paths": [
+        "M1420,428 Q1425,378 1525,374 Q1630,378 1634,428 Q1630,478 1525,482 Q1425,478 1420,428 Z"
+      ]
+    },
+    {
+      "id": 24,
+      "slug": "senior-high-school-bldg",
+      "name": "Senior High School Bldg.",
+      "category": "academic",
+      "kind": "building",
+      "anchor": {
+        "x": 1739,
+        "y": 333
+      },
+      "anchorPct": {
+        "x": 0.8662,
+        "y": 0.1857
+      },
+      "paths": [
+        "M1610,300 L1872,315 L1870,365 L1612,347 Z"
+      ]
+    },
+    {
+      "id": 25,
+      "slug": "mrf",
+      "name": "MRF",
+      "category": "utility",
+      "kind": "building",
+      "anchor": {
+        "x": 493,
+        "y": 713
+      },
+      "anchorPct": {
+        "x": 0.2272,
+        "y": 0.6792
+      },
+      "paths": [
+        "M466,700 L520,703 L520,722 L466,716 Z"
+      ]
+    },
+    {
+      "id": 26,
+      "slug": "carpentry-shop",
+      "name": "Carpentry Shop",
+      "category": "utility",
+      "kind": "building",
+      "anchor": {
+        "x": 549,
+        "y": 718
+      },
+      "anchorPct": {
+        "x": 0.2559,
+        "y": 0.6857
+      },
+      "paths": [
+        "M524,703 L572,708 L572,728 L524,722 Z"
+      ]
+    },
+    {
+      "id": 27,
+      "slug": "dormitory-bldg",
+      "name": "Dormitory Bldg.",
+      "category": "residential",
+      "kind": "building",
+      "anchor": {
+        "x": 1606,
+        "y": 536
+      },
+      "anchorPct": {
+        "x": 0.7979,
+        "y": 0.4494
+      },
+      "paths": [
+        "M1567,545 L1622,498 L1646,520 L1592,576 Z",
+        "M1545,556 L1566,545 L1586,568 L1564,592 Z"
+      ]
+    },
+    {
+      "id": 28,
+      "slug": "playing-court",
+      "name": "Playing Court",
+      "category": "sports",
+      "kind": "zone",
+      "anchor": {
+        "x": 1481,
+        "y": 558
+      },
+      "anchorPct": {
+        "x": 0.7338,
+        "y": 0.4779
+      },
+      "paths": [
+        "M1450,505 L1508,500 L1515,616 L1455,620 Z"
+      ]
+    },
+    {
+      "id": 29,
+      "slug": "track-field-oval",
+      "name": "Track & Field Oval",
+      "category": "sports",
+      "kind": "zone",
+      "anchor": {
+        "x": 1338,
+        "y": 520
+      },
+      "anchorPct": {
+        "x": 0.6605,
+        "y": 0.4286
+      },
+      "paths": [
+        "M1090,360 L1630,372 Q1650,374 1652,396 L1655,462 Q1655,478 1640,484 L1568,508 Q1550,516 1538,534 L1515,574 Q1508,588 1490,590 L1085,616 Q1062,617 1060,596 L1066,384 Q1067,358 1090,360 Z"
+      ]
+    },
+    {
+      "id": 30,
+      "slug": "softball-field",
+      "name": "Softball Field",
+      "category": "sports",
+      "kind": "zone",
+      "anchor": {
+        "x": 1120,
+        "y": 482
+      },
+      "anchorPct": {
+        "x": 0.5487,
+        "y": 0.3792
+      },
+      "paths": [
+        "M1104,452 Q1100,402 1156,398 Q1212,402 1210,452 Q1206,500 1156,502 Q1108,500 1104,452 Z"
+      ]
+    },
+    {
+      "id": 31,
+      "slug": "yaya-s-shed",
+      "name": "Yaya's Shed",
+      "category": "utility",
+      "kind": "building",
+      "anchor": {
+        "x": 237,
+        "y": 623
+      },
+      "anchorPct": {
+        "x": 0.0959,
+        "y": 0.5623
+      },
+      "paths": [
+        "M204,612 L240,592 L272,622 L258,652 L232,645 Z"
+      ]
+    },
+    {
+      "id": 32,
+      "slug": "power-house-2",
+      "name": "Power House 2",
+      "category": "utility",
+      "kind": "building",
+      "anchor": {
+        "x": 1423,
+        "y": 309
+      },
+      "anchorPct": {
+        "x": 0.7041,
+        "y": 0.1545
+      },
+      "paths": [
+        "M1410,300 L1436,300 L1436,317 L1412,317 Z"
+      ]
+    },
+    {
+      "id": 33,
+      "slug": "bus-garage",
+      "name": "Bus Garage",
+      "category": "utility",
+      "kind": "building",
+      "anchor": {
+        "x": 1477,
+        "y": 652
+      },
+      "anchorPct": {
+        "x": 0.7318,
+        "y": 0.6
+      },
+      "paths": [
+        "M1452,628 L1503,626 L1503,675 L1452,677 Z"
+      ]
+    },
+    {
+      "id": 34,
+      "slug": "storage",
+      "name": "Storage",
+      "category": "utility",
+      "kind": "building",
+      "anchor": {
+        "x": 1783,
+        "y": 449
+      },
+      "anchorPct": {
+        "x": 0.8887,
+        "y": 0.3364
+      },
+      "paths": [
+        "M1755,428 L1812,426 L1810,470 L1756,468 Z"
+      ]
+    },
+    {
+      "id": 35,
+      "slug": "power-house-3",
+      "name": "Power House 3",
+      "category": "utility",
+      "kind": "building",
+      "anchor": {
+        "x": 361,
+        "y": 646
+      },
+      "anchorPct": {
+        "x": 0.1595,
+        "y": 0.5922
+      },
+      "paths": [
+        "M336,626 L376,636 L372,662 L346,652 Z"
+      ]
+    }
+  ]
+}
