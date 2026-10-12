@@ -1,154 +1,92 @@
-// Real-backend-ready auth abstraction. Tries fetch, falls back to localStorage mock.
-import { mockUsers } from '@campus/mock-data';
-
 export interface AuthUser {
   id: string;
   name: string;
   email: string;
-  role: 'student' | 'admin';
+  role: 'student' | 'professor' | 'admin' | 'prefer_not_to_say';
+  username?: string;
   token: string;
 }
 
-const LS_USERS = 'campus_users';
 const LS_TOKEN = 'campus_token';
 const LS_USER = 'campus_user';
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || '';
 
-function getStoredUsers(): typeof mockUsers {
-  if (typeof window === 'undefined') return [...mockUsers];
-  try {
-    const raw = localStorage.getItem(LS_USERS);
-    if (raw) return JSON.parse(raw);
-  } catch {}
-  return [...mockUsers];
-}
-function saveStoredUsers(users: typeof mockUsers) {
-  if (typeof window !== 'undefined') localStorage.setItem(LS_USERS, JSON.stringify(users));
+function saveSession(user: AuthUser) {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(LS_TOKEN, user.token);
+  localStorage.setItem(LS_USER, JSON.stringify(user));
+  document.cookie = `campus_token=${user.token}; Path=/; Max-Age=${7 * 24 * 60 * 60}`;
 }
 
 export function getCurrentUser(): AuthUser | null {
   if (typeof window === 'undefined') return null;
   try {
     const raw = localStorage.getItem(LS_USER);
-    if (raw) return JSON.parse(raw);
-  } catch {}
-  return null;
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
 }
+
 export function getToken(): string | null {
   if (typeof window === 'undefined') return null;
   return localStorage.getItem(LS_TOKEN);
 }
+
 export function isAuthenticated(): boolean {
   return !!getToken();
 }
-export function logout() {
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem(LS_TOKEN);
-    localStorage.removeItem(LS_USER);
-    document.cookie = `campus_token=; Path=/; Max-Age=0`;
-  }
-}
 
-async function tryRealLogin(email: string, password: string): Promise<AuthUser | null> {
-  if (!API_BASE) return null;
-  try {
-    const res = await fetch(`${API_BASE}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    return data.user ?? data;
-  } catch {
-    return null;
-  }
+export function logout() {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem(LS_TOKEN);
+  localStorage.removeItem(LS_USER);
+  document.cookie = `campus_token=; Path=/; Max-Age=0`;
 }
 
 export async function login(email: string, password: string): Promise<AuthUser> {
-  const real = await tryRealLogin(email, password);
-  if (real) {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(LS_TOKEN, real.token);
-      localStorage.setItem(LS_USER, JSON.stringify(real));
-      document.cookie = `campus_token=${real.token}; Path=/; Max-Age=${7 * 24 * 60 * 60}`;
-    }
-    return real;
+  if (!API_BASE) {
+    throw new Error('The app is not connected to the server yet.');
   }
-  // Mock fallback: validate against stored users (password: any non-empty suffices, but check if user exists)
-  const users = getStoredUsers();
-  const u = users.find((x) => x.email.toLowerCase() === email.toLowerCase());
-  if (!u) throw new Error('No account found for this email');
-  // accept any password for mock; optional strict: if password.length < 4 throw
-  if (!password || password.length < 1) throw new Error('Invalid credentials');
-  const token = `mock-${u.id}-${Date.now()}`;
-  const authUser: AuthUser = { id: u.id, name: u.name, email: u.email, role: u.role as any, token };
-  if (typeof window !== 'undefined') {
-    localStorage.setItem(LS_TOKEN, token);
-    localStorage.setItem(LS_USER, JSON.stringify(authUser));
-    document.cookie = `campus_token=${token}; Path=/; Max-Age=${7 * 24 * 60 * 60}`;
+  const res = await fetch(`${API_BASE}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+  const text = await res.text();
+  if (!res.ok) {
+    let message = 'Login failed.';
+    try {
+      message = JSON.parse(text).error || message;
+    } catch {}
+    throw new Error(message);
   }
-  return authUser;
-}
-
-async function tryRealSignup(name: string, email: string, password: string): Promise<AuthUser | null> {
-  if (!API_BASE) return null;
-  try {
-    const res = await fetch(`${API_BASE}/auth/signup`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password }),
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    return data.user ?? data;
-  } catch {
-    return null;
+  const data = JSON.parse(text);
+  const user: AuthUser = data.user ?? data;
+  if (user.role !== 'admin') {
+    throw new Error('This account does not have admin access.');
   }
+  saveSession(user);
+  return user;
 }
 
 export async function signup(name: string, email: string, password: string): Promise<AuthUser> {
-  const real = await tryRealSignup(name, email, password);
-  if (real) {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(LS_TOKEN, real.token);
-      localStorage.setItem(LS_USER, JSON.stringify(real));
-      document.cookie = `campus_token=${real.token}; Path=/; Max-Age=${7 * 24 * 60 * 60}`;
-    }
-    return real;
+  if (!API_BASE) {
+    throw new Error('The app is not connected to the server yet.');
   }
-  const users = getStoredUsers();
-  if (users.some((x) => x.email.toLowerCase() === email.toLowerCase())) throw new Error('Email already registered');
-  const newUser = {
-    id: `user-${Date.now()}`,
-    name,
-    email,
-    role: 'student' as const,
-    studentId: `STU-${Date.now()}`,
-    createdAt: new Date().toISOString(),
-  };
-  users.push(newUser as any);
-  saveStoredUsers(users);
-  const token = `mock-${newUser.id}-${Date.now()}`;
-  const authUser: AuthUser = { id: newUser.id, name: newUser.name, email: newUser.email, role: 'student', token };
-  if (typeof window !== 'undefined') {
-    localStorage.setItem(LS_TOKEN, token);
-    localStorage.setItem(LS_USER, JSON.stringify(authUser));
-    document.cookie = `campus_token=${token}; Path=/; Max-Age=${7 * 24 * 60 * 60}`;
-  }
-  return authUser;
-}
-
-export async function upvoteReport(reportId: string): Promise<void> {
-  if (API_BASE) {
+  const res = await fetch(`${API_BASE}/auth/admin-signup`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, password }),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    let message = 'Signup failed.';
     try {
-      await fetch(`${API_BASE}/reports/${reportId}/upvote`, { method: 'POST', headers: { Authorization: `Bearer ${getToken()}` } });
-      return;
+      message = JSON.parse(text).error || message;
     } catch {}
+    throw new Error(message);
   }
-  // mock no-op persisted in localStorage
-  if (typeof window === 'undefined') return;
-  const key = `campus_upvotes_${reportId}`;
-  const v = Number(localStorage.getItem(key) || '0') + 1;
-  localStorage.setItem(key, String(v));
+
+  return login(email, password);
 }

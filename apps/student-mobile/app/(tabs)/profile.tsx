@@ -1,38 +1,73 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { currentStudent } from '@campus/mock-data';
+import { getCurrentUser, AuthUser } from '@/lib/auth';
 import { theme } from '@/constants/theme';
 
+const ROLE_LABELS: Record<string, string> = {
+  student: 'Student',
+  professor: 'Professor',
+  admin: 'Admin',
+  prefer_not_to_say: 'Prefer not to say',
+};
+
 export default function ProfileScreen() {
-  const initials = currentStudent.name
-    .split(' ')
-    .map((n) => n[0])
-    .join('');
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getCurrentUser().then((u) => {
+      setUser(u);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  if (!user) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.avatar}>
+          <Text style={styles.avatarText}>C</Text>
+        </View>
+        <Text style={styles.name}>Campus Fix</Text>
+        <Text style={styles.email}>You're browsing anonymously</Text>
+      </View>
+    );
+  }
+
+  const displayName = user.username || user.name;
+  const initial = (displayName[0] || '?').toUpperCase();
+  const roleLabel = ROLE_LABELS[user.role] ?? user.role;
 
   return (
     <View style={styles.container}>
       <View style={styles.avatar}>
-        <Text style={styles.avatarText}>{initials}</Text>
+        <Text style={styles.avatarText}>{initial}</Text>
       </View>
 
-      <Text style={styles.name}>{currentStudent.name}</Text>
-      <Text style={styles.email}>{currentStudent.email}</Text>
+      <Text style={styles.name}>{displayName}</Text>
+      <Text style={styles.email}>{user.email}</Text>
 
-      {currentStudent.studentId && (
-        <View style={styles.infoCard}>
-          <Ionicons name="school-outline" size={20} color={theme.colors.primary} />
-          <View>
-            <Text style={styles.infoLabel}>Student ID</Text>
-            <Text style={styles.infoValue}>{currentStudent.studentId}</Text>
-          </View>
+      <View style={styles.infoCard}>
+        <Ionicons name="school-outline" size={20} color={theme.colors.primary} />
+        <View>
+          <Text style={styles.infoLabel}>Student ID</Text>
+          <Text style={styles.infoValue}>{user.studentId || ' '}</Text>
         </View>
-      )}
+      </View>
 
       <View style={styles.infoCard}>
         <Ionicons name="shield-checkmark-outline" size={20} color={theme.colors.primary} />
         <View>
           <Text style={styles.infoLabel}>Role</Text>
-          <Text style={styles.infoValue}>Student</Text>
+          <Text style={styles.infoValue}>{roleLabel}</Text>
         </View>
       </View>
     </View>

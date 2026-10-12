@@ -9,48 +9,73 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { Feather, FontAwesome } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { login } from '@/lib/auth';
 
 export default function LoginScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleLogin = async () => {
+    if (!username.trim() || !password) {
+      Alert.alert('Missing fields', 'Enter your email and password.');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await login(username.trim(), password);
+      router.replace('/(tabs)');
+    } catch (error: any) {
+      Alert.alert('Login failed', error?.message || 'Please check your credentials.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ headerShown: false, animation: 'slide_from_right' }} />
-
-      <LinearGradient
-        colors={['#0F172A', '#0891B2', '#ECFEFF']}
-        locations={[0, 0.55, 1]}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
-        style={[styles.topCard, { paddingTop: insets.top + 24 }]}
+      <TouchableOpacity
+        onPress={() => router.back()}
+        activeOpacity={0.7}
+        style={[styles.backButton, { top: insets.top + 12 }]}
       >
-        <Text style={styles.helloText}>Hello, Welcome!</Text>
-        <Text style={styles.helloSubtext}>Glad to see you!</Text>
-        <Image
-          source={require('../assets/logo.png')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
-      </LinearGradient>
-
+        <Feather name="arrow-left" size={20} color="#fff" />
+        </TouchableOpacity>
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={insets.top}
       >
         <ScrollView
           contentContainerStyle={styles.bottomScroll}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
+          <LinearGradient
+            colors={['#0F172A', '#0891B2', '#ECFEFF']}
+            locations={[0, 0.55, 1]}
+            start={{ x: 0.5, y: 0 }}
+            end={{ x: 0.5, y: 1 }}
+            style={[styles.topCard, { paddingTop: insets.top + 24 }]}
+          >
+            <Text style={styles.helloText}>Hello, Welcome!</Text>
+            <Text style={styles.helloSubtext}>Glad to see you!</Text>
+            <Image
+              source={require('../assets/logo.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          </LinearGradient>
+
           <View style={styles.formWrapper}>
             <View style={styles.loginTitleRow}>
               <Text style={styles.loginTitleText}>Login </Text>
@@ -87,10 +112,17 @@ export default function LoginScreen() {
                   style={styles.input}
                   placeholder="Password"
                   placeholderTextColor="#8FAFD1"
-                  secureTextEntry
+                  secureTextEntry={!showPassword}
                   value={password}
                   onChangeText={setPassword}
                 />
+                <TouchableOpacity onPress={() => setShowPassword((v) => !v)} hitSlop={10}>
+                  <Feather
+                    name={showPassword ? 'eye' : 'eye-off'}
+                    size={18}
+                    color="#3B82F6"
+                  />
+                </TouchableOpacity>
               </LinearGradient>
 
               <TouchableOpacity style={styles.forgotWrapper}>
@@ -99,8 +131,9 @@ export default function LoginScreen() {
             </View>
 
             <TouchableOpacity
-              onPress={() => router.replace('/(tabs)')}
+              onPress={handleLogin}
               activeOpacity={0.85}
+              disabled={submitting}
             >
               <LinearGradient
                 colors={['#0066FF', '#00C6FF']}
@@ -108,7 +141,7 @@ export default function LoginScreen() {
                 end={{ x: 1, y: 0 }}
                 style={styles.loginButton}
               >
-                <Text style={styles.loginButtonText}>Login</Text>
+                <Text style={styles.loginButtonText}>{submitting ? 'Logging in...' : 'Login'}</Text>
               </LinearGradient>
             </TouchableOpacity>
 
@@ -124,16 +157,7 @@ export default function LoginScreen() {
             </View>
 
             <TouchableOpacity
-              onPress={() => router.push('/anonymous')}
-              activeOpacity={0.7}
-              style={styles.guestButton}
-            >
-              <Feather name="eye-off" size={16} color="#0891B2" style={styles.guestIcon} />
-              <Text style={styles.guestButtonText}>Continue as Guest</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => router.push('/signup')}
+              onPress={() => router.replace('/signup')}
               activeOpacity={0.7}
               style={styles.registerRow}
             >
@@ -149,6 +173,17 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
+  backButton: {
+    position: 'absolute',
+    left: 24,
+    zIndex: 10,
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -278,25 +313,6 @@ const styles = StyleSheet.create({
     borderColor: '#E2E8F0',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  guestButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1.5,
-    borderColor: '#0891B2',
-    borderStyle: 'dashed',
-    borderRadius: 14,
-    paddingVertical: 12,
-    marginTop: 24,
-  },
-  guestIcon: {
-    marginRight: 8,
-  },
-  guestButtonText: {
-    color: '#0891B2',
-    fontWeight: '700',
-    fontSize: 14,
   },
   registerRow: {
     alignItems: 'center',

@@ -15,7 +15,7 @@
   },
   "packageManager": "pnpm@9.15.0",
   "dependencies": {
-    "expo-linear-gradient": "~14.0.2"
+    "expo-linear-gradient": "~14.0.2",
+    "expo-screen-orientation": "^57.0.2"
   }
 }
-

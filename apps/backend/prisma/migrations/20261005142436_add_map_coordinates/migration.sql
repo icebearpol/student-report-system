@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "reports" ADD COLUMN     "map_x" DOUBLE PRECISION,
+ADD COLUMN     "map_y" DOUBLE PRECISION;

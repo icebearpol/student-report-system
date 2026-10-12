@@ -9,18 +9,46 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { Feather, FontAwesome } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { signup } from '@/lib/auth';
+import { TermsModal } from '@/components/TermsModal';
 
 export default function SignupScreen() {
+  const [termsVisible, setTermsVisible] = useState(false);
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSignup = async () => {
+    if (!email.trim() || !password || !confirmPassword) {
+      Alert.alert('Missing fields', 'Fill in all fields.');
+      return;
+    }
+    if (password !== confirmPassword) {
+      Alert.alert('Passwords don\'t match', 'Check your password and confirmation.');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const name = email.split('@')[0];
+      await signup(name, email.trim(), password);
+      router.replace({ pathname: '/verify-email', params: { from: 'signup' } } as any);
+    } catch (error: any) {
+      Alert.alert('Signup failed', error?.message || 'Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <LinearGradient
@@ -71,7 +99,7 @@ export default function SignupScreen() {
                   <Feather name="mail" size={17} color="#3B82F6" style={styles.icon} />
                   <TextInput
                     style={styles.input}
-                    placeholder="Email"
+                    placeholder="School email (@smctagum.edu.ph)"
                     placeholderTextColor="#8FAFD1"
                     value={email}
                     onChangeText={setEmail}
@@ -91,10 +119,17 @@ export default function SignupScreen() {
                     style={styles.input}
                     placeholder="Password"
                     placeholderTextColor="#8FAFD1"
-                    secureTextEntry
+                    secureTextEntry={!showPassword}
                     value={password}
                     onChangeText={setPassword}
                   />
+                  <TouchableOpacity onPress={() => setShowPassword((v) => !v)} hitSlop={10}>
+                    <Feather
+                      name={showPassword ? 'eye' : 'eye-off'}
+                      size={17}
+                      color="#3B82F6"
+                    />
+                  </TouchableOpacity>
                 </LinearGradient>
 
                 <LinearGradient
@@ -108,16 +143,24 @@ export default function SignupScreen() {
                     style={styles.input}
                     placeholder="Confirm Password"
                     placeholderTextColor="#8FAFD1"
-                    secureTextEntry
+                    secureTextEntry={!showConfirmPassword}
                     value={confirmPassword}
                     onChangeText={setConfirmPassword}
                   />
+                  <TouchableOpacity onPress={() => setShowConfirmPassword((v) => !v)} hitSlop={10}>
+                    <Feather
+                      name={showConfirmPassword ? 'eye' : 'eye-off'}
+                      size={17}
+                      color="#3B82F6"
+                    />
+                  </TouchableOpacity>
                 </LinearGradient>
               </View>
 
               <TouchableOpacity
-                onPress={() => router.replace('/(tabs)')}
+                onPress={handleSignup}
                 activeOpacity={0.85}
+                disabled={submitting}
                 style={styles.signupButtonWrapper}
               >
                 <LinearGradient
@@ -126,7 +169,7 @@ export default function SignupScreen() {
                   end={{ x: 1, y: 0 }}
                   style={styles.signupButton}
                 >
-                  <Text style={styles.signupButtonText}>Sign up</Text>
+                  <Text style={styles.signupButtonText}>{submitting ? 'Creating account...' : 'Sign up'}</Text>
                 </LinearGradient>
               </TouchableOpacity>
 
@@ -141,17 +184,17 @@ export default function SignupScreen() {
                 </TouchableOpacity>
               </View>
 
-              <TouchableOpacity
-                onPress={() => router.push('/anonymous')}
-                activeOpacity={0.7}
-                style={styles.guestButton}
-              >
-                <Feather name="eye-off" size={16} color="#0891B2" style={styles.guestIcon} />
-                <Text style={styles.guestButtonText}>Continue as Guest</Text>
-              </TouchableOpacity>
+                <Text style={styles.termsText}>
+  By signing up, you agree to our{' '}
+  <Text style={styles.termsLink} onPress={() => setTermsVisible(true)}>
+    Terms & Privacy Policy
+  </Text>
+  .
+</Text>
+<TermsModal visible={termsVisible} onClose={() => setTermsVisible(false)} />
 
               <TouchableOpacity
-                onPress={() => router.push('/login')}
+                onPress={() => router.replace('/login')}
                 activeOpacity={0.7}
                 style={styles.loginRow}
               >
@@ -168,12 +211,8 @@ export default function SignupScreen() {
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-  },
-  flex: {
-    flex: 1,
-  },
+  background: { flex: 1 },
+  flex: { flex: 1 },
   backButton: {
     position: 'absolute',
     left: 24,
@@ -297,26 +336,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  guestButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1.5,
-    borderColor: '#0891B2',
-    borderStyle: 'dashed',
-    borderRadius: 14,
-    paddingVertical: 12,
-    width: '100%',
-    marginTop: 4,
-  },
-  guestIcon: {
-    marginRight: 8,
-  },
-  guestButtonText: {
-    color: '#0891B2',
-    fontWeight: '700',
-    fontSize: 14,
-  },
   loginRow: {
     marginTop: 22,
   },
@@ -324,7 +343,18 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#64748B',
   },
-  loginBold: {
+    loginBold: {
+    color: '#0891B2',
+    fontWeight: '700',
+  },
+  termsText: {
+    fontSize: 11.5,
+    color: '#64748B',
+    textAlign: 'center',
+    lineHeight: 17,
+    marginTop: 16,
+  },
+  termsLink: {
     color: '#0891B2',
     fontWeight: '700',
   },

@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  PROFESSOR
+  ADMIN
+  PREFER_NOT_TO_SAY
+}
+
+enum ReportStatus {
+  pending
+  in_review
+  resolved
+}
+
+model User {
+  id                String    @id @default(cuid())
+  studentId         String?   @unique @map("student_id")
+  username          String?   @unique
+  email             String    @unique
+  passwordHash      String    @map("password_hash")
+  fullName          String    @map("full_name")
+  role              Role      @default(STUDENT)
+  firstLogin        Boolean   @default(true) @map("first_login")
+  profileCompleted  Boolean   @default(false) @map("profile_completed")
+  emailVerified     Boolean   @default(false) @map("email_verified")
+  verifyCodeHash    String?   @map("verify_code_hash")
+  verifyCodeExpires DateTime? @map("verify_code_expires")
+  verifyCodeSentAt  DateTime? @map("verify_code_sent_at")
+  verifyAttempts    Int       @default(0) @map("verify_attempts")
+  urgentStrikes     Int       @default(0) @map("urgent_strikes")
+  urgentBlocked     Boolean   @default(false) @map("urgent_blocked")
+  createdAt         DateTime  @default(now()) @map("created_at")
+
+  reports       Report[]
+  comments      ReportComment[]
+  notifications Notification[]
+  auditLogs     AuditLog[]
+
+  @@map("users")
+}
+
+model Report {
+  id                  String       @id @default(cuid())
+  title               String
+  description         String
+  status              ReportStatus @default(pending)
+  location            String?
+  category            String?
+  priority            String       @default("medium")
+  reportedPriority    String?      @map("reported_priority")
+  priorityReview      Boolean      @default(false) @map("priority_review")
+  urgentStrikeApplied Boolean      @default(false) @map("urgent_strike_applied")
+  anonymous           Boolean      @default(false)
+  upvotes             Int          @default(0)
+  imageUrl            String?      @map("image_url")
+  assignedTo          String?      @map("assigned_to")
+  mapX                Float?       @map("map_x")
+  mapY                Float?       @map("map_y")
+  aiStatus            String       @default("unchecked") @map("ai_status")
+  aiSummary           String?      @map("ai_summary")
+  aiSuggestedPriority String?      @map("ai_suggested_priority")
+  flagged             Boolean      @default(false)
+  flagReason          String?      @map("flag_reason")
+  removedAt           DateTime?    @map("removed_at")
+  removedReason       String?      @map("removed_reason")
+  createdAt           DateTime     @default(now()) @map("created_at")
+  updatedAt           DateTime     @updatedAt @map("updated_at")
+
+  authorId String? @map("author_id")
+  author   User?   @relation(fields: [authorId], references: [id])
+
+  comments      ReportComment[]
+  notifications Notification[]
+
+  @@map("reports")
+}
+
+model ReportComment {
+  id        String   @id @default(cuid())
+  body      String
+  createdAt DateTime @default(now()) @map("created_at")
+  editedAt  DateTime? @map("edited_at")
+  deletedAt DateTime? @map("deleted_at")
+  reportId String @map("report_id")
+  report   Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  authorId String? @map("author_id")
+  author   User?   @relation(fields: [authorId], references: [id])
+  
+  @@map("report_comments")
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  type      String
+  title     String
+  body      String
+  severity  String    @default("info")
+  expiresAt DateTime? @map("expires_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  userId String? @map("user_id")
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  reportId String? @map("report_id")
+  report   Report? @relation(fields: [reportId], references: [id], onDelete: SetNull)
+
+  @@map("notifications")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  detail    String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  userId String? @map("user_id")
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+}

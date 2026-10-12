@@ -1,22 +1,35 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import {
-  LayoutDashboard,
-  FileText,
-  Settings,
-} from 'lucide-react';
-import { currentAdmin } from '@campus/mock-data';
+import { useEffect, useState } from 'react';
+import { LayoutDashboard, FileText, Trash2, LogOut } from 'lucide-react';
+import { getCurrentUser, logout, AuthUser } from '@/lib/auth';
 
 const navItems = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/reports', label: 'Reports', icon: FileText },
+  { href: '/trash', label: 'Removed', icon: Trash2 },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [user, setUser] = useState<AuthUser | null>(null);
+
+  useEffect(() => {
+    setUser(getCurrentUser());
+  }, []);
+
+  const handleLogout = () => {
+    logout();
+    router.push('/login');
+  };
+
+  const initials = user
+    ? user.name.split(' ').map((n) => n[0]).join('').toUpperCase()
+    : '?';
 
   return (
     <aside className="fixed inset-y-0 left-0 z-30 flex w-64 flex-col border-r border-slate-200 bg-white">
@@ -37,8 +50,7 @@ export function Sidebar() {
 
       <nav className="flex-1 space-y-1 p-4">
         {navItems.map(({ href, label, icon: Icon }) => {
-          const isActive =
-            href === '/' ? pathname === '/' : pathname.startsWith(href);
+          const isActive = href === '/' ? pathname === '/' : pathname.startsWith(href);
 
           return (
             <Link
@@ -60,18 +72,22 @@ export function Sidebar() {
       <div className="border-t border-slate-200 p-4">
         <div className="flex items-center gap-3 rounded-lg px-3 py-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-100 text-sm font-semibold text-primary-700">
-            {currentAdmin.name
-              .split(' ')
-              .map((n) => n[0])
-              .join('')}
+            {initials}
           </div>
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium text-slate-900">
-              {currentAdmin.name}
+              {user?.username || user?.name || 'Admin'}
             </p>
             <p className="truncate text-xs text-slate-500">Administrator</p>
           </div>
-          <Settings className="h-4 w-4 text-slate-400" />
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="text-slate-400 hover:text-slate-700"
+            title="Log out"
+          >
+            <LogOut className="h-4 w-4" />
+          </button>
         </div>
       </div>
     </aside>

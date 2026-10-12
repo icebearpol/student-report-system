@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { User, Mail, Lock, LockKeyhole, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { signup } from '@/lib/auth';
+import { TermsModal } from '@/components/TermsModal';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -14,6 +15,7 @@ export default function SignupPage() {
   const [confirm, setConfirm] = useState('');
   const [show, setShow] = useState(false);
   const [terms, setTerms] = useState(false);
+  const [termsOpen, setTermsOpen] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -56,7 +58,7 @@ export default function SignupPage() {
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-medium text-[#42474d] ml-2">Student Email</label>
+              <label className="text-xs font-medium text-[#42474d] ml-2">Admin Email</label>
               <div className="flex items-center bg-[#E8F7FB]/50 border border-[#0a3c58]/20 rounded-lg px-4 py-3 input-focus-ring">
                 <Mail className="h-5 w-5 text-[#72787e] mr-3" />
                 <input value={email} onChange={(e)=>setEmail(e.target.value)} required type="email" placeholder="jane.doe@university.edu" className="w-full bg-transparent border-none p-0 text-[#101e21] placeholder:text-[#c2c7ce] focus:ring-0 focus:outline-none" />
@@ -79,7 +81,12 @@ export default function SignupPage() {
             </div>
             <div className="flex items-start gap-3 mt-2">
               <input id="terms" type="checkbox" checked={terms} onChange={(e)=>setTerms(e.target.checked)} required className="w-6 h-6 rounded-md border-[#72787e] text-[#46C3DB] focus:ring-[#46C3DB] bg-[#E8F7FB]/50" />
-              <label htmlFor="terms" className="text-sm text-[#42474d] leading-tight">I agree to the <a className="text-[#0A3C58] font-medium hover:underline" href="#">Privacy Policy</a> and <a className="text-[#0A3C58] font-medium hover:underline" href="#">Terms of Service</a>.</label>
+              <label htmlFor="terms" className="text-sm text-[#42474d] leading-tight">
+                I agree to the{' '}
+                <button type="button" onClick={() => setTermsOpen(true)} className="text-[#0A3C58] font-medium hover:underline">Privacy Policy</button>
+                {' '}and{' '}
+                <button type="button" onClick={() => setTermsOpen(true)} className="text-[#0A3C58] font-medium hover:underline">Terms of Service</button>.
+              </label>
             </div>
             <button disabled={loading} type="submit" className="mt-4 w-full h-[56px] rounded-full bg-gradient-to-r from-[#0A3C58] to-[#46C3DB] text-white font-semibold shadow-md flex items-center justify-center gap-2 active:scale-[0.98] transition-transform disabled:opacity-60">
               {loading?'Creating…':'Create Account'} <ArrowRight className="h-4 w-4" />
@@ -90,6 +97,7 @@ export default function SignupPage() {
           </div>
         </div>
       </main>
+      <TermsModal open={termsOpen} onClose={() => setTermsOpen(false)} />
     </div>
   );
 }

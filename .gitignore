@@ -48,3 +48,5 @@ out/
 
 # Turbo
 .turbo
+
+apps/backend/uploads/

@@ -3,6 +3,8 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { theme } from '@/constants/theme';
+import { logout } from '@/lib/auth';
+import { clearAnonymousReports } from '@/lib/reports';
 
 export default function AnonymousScreen(){
   const router=useRouter();
@@ -28,7 +30,15 @@ export default function AnonymousScreen(){
             <Text style={styles.privacyText}>No personal identifiers are stored. Your location and report details are completely anonymized.</Text>
           </View>
         </View>
-        <TouchableOpacity onPress={()=>router.push('/(tabs)' as any)} activeOpacity={0.9} style={styles.btnWrap}>
+        <TouchableOpacity
+          onPress={async () => {
+            await logout();
+            await clearAnonymousReports();
+            router.push('/(tabs)' as any);
+          }}
+          activeOpacity={0.9}
+          style={styles.btnWrap}
+        >
           <LinearGradient colors={[theme.colors.gradientStart, theme.colors.gradientEnd]} start={{x:0,y:0}} end={{x:1,y:0}} style={styles.btn}>
             <Text style={styles.btnText}>Proceed Anonymously</Text><Ionicons name="arrow-forward" size={16} color="#fff"/>
           </LinearGradient>
