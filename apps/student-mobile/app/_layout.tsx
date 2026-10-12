@@ -25,6 +25,12 @@ export default function RootLayout() {
         <Stack.Screen name="signup" options={{ title: 'Create Account', headerShown: true }} />
         <Stack.Screen name="anonymous" options={{ headerShown: false }} />
         <Stack.Screen name="issues" options={{ title: 'Public Issues', headerTintColor: '#fff', headerStyle:{backgroundColor: theme.colors.gradientStart} as any }} />
+        <Stack.Screen name="public-map" options={{ title: 'Public Map' }} />
+        <Stack.Screen name="notifications" options={{ title: 'Notifications' }} />
+        <Stack.Screen
+          name="emergency"
+          options={{ title: 'Emergency', presentation: 'modal' }}
+        />
         <Stack.Screen name="my-reports" options={{ title: 'My Reports' }} />
         <Stack.Screen name="map-picker" options={{ headerShown: false, presentation: 'fullScreenModal', animation: 'fade' }} />
         <Stack.Screen name="campus-map" options={{ headerShown: false, animation: 'fade' }} />

@@ -122,3 +122,23 @@ export const shadows = {
   md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
   lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
 } as const;
+
+export const brand = {
+  mark: 32,
+  headerWidth: 160,
+  headerHeight: 48,
+  heroWidth: 240,
+  heroHeight: 212,
+  // Unified transparent/floating auth logo spec (source of truth):
+  // No white/surface card behind the mark. The full lockup floats
+  // directly on the teal->cyan gradient hero. Anonymous entry, login
+  // (and signup hero) share identical mark size + wordmark + spacing;
+  // only the "Anonymous Mode Enabled" pill differentiates anonymous.
+  authMarkWidth: 240,
+  authMarkHeight: 212,
+  appTitle: 16,
+  cardTitle: 20,
+  pageTitle: 20,
+  wordmark: 28,
+  tagline: 11,
+} as const;
